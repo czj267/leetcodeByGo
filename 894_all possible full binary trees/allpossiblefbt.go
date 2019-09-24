@@ -1,7 +1,7 @@
 package main
 
 import (
-	common "LeetCode/0_common"
+	common "LeetCodeByGo/0_common"
 	"fmt"
 )
 
