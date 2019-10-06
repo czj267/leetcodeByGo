@@ -11,14 +11,14 @@ func main() {
 func mergeSort(nums []int) {
 	l, r := 0, len(nums)-1
 	tmpNums := make([]int, len(nums)) //和nums等长的数据可以避免重复申请
-	sort(nums, l, r, tmpNums)
+	mySort(nums, l, r, tmpNums)
 }
 
-func sort(nums []int, l, r int, tmpNums []int) {
+func mySort(nums []int, l, r int, tmpNums []int) {
 	if l < r {
 		m := (l + r) / 2
-		sort(nums, l, m, tmpNums)
-		sort(nums, m+1, r, tmpNums)
+		mySort(nums, l, m, tmpNums)
+		mySort(nums, m+1, r, tmpNums)
 		merge(nums, l, m, r, tmpNums)
 	}
 }
