@@ -10,7 +10,7 @@ type rateLimiter struct {
 	lck      *sync.Mutex
 	rate     float64   //最大速率限制
 	balance  float64   //漏桶的剩余的空间
-	limit    float64   //漏桶的最大容量限制
+	capacity float64   //漏桶的最大容量限制
 	lastTime time.Time //上次检查的时间
 }
 
@@ -19,27 +19,28 @@ func NewRateLimiter(limitPerSecond, balance int) *rateLimiter {
 		lck:      new(sync.Mutex),
 		rate:     float64(limitPerSecond),
 		balance:  float64(balance),
-		limit:    float64(balance),
+		capacity: float64(balance),
 		lastTime: time.Now(),
 	}
 }
 
 func (r *rateLimiter) Check() bool {
-	ok := false
 	r.lck.Lock()
+	defer r.lck.Unlock()
+
+	ok := false
 	now := time.Now()
 	dur := now.Sub(r.lastTime).Seconds()
-	r.lastTime = now
 	water := dur * r.rate //计算这段时间内漏桶流出水的流量water
-	r.balance += water    //漏桶流出water容量的水，自然漏桶的余量多出water
-	if r.balance > r.limit {
-		r.balance = r.limit
+	r.lastTime = now
+	r.balance += water //漏桶流出water容量的水，自然漏桶的余量多出water
+	if r.balance > r.capacity {
+		r.balance = r.capacity
 	}
 	if r.balance >= 1 { //漏桶余量足够容下当前的请求
 		r.balance -= 1
 		ok = true
 	}
-	r.lck.Unlock()
 	return ok
 }
 

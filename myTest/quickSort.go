@@ -13,6 +13,7 @@ func quickSort(nums []int) {
 }
 
 func _quickSort(nums []int, start, end int) {
+	//先排再分
 	p := partition(nums, start, end)
 	if p <= 0 {
 		return

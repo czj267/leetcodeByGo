@@ -17,6 +17,7 @@ func mergeSort(nums []int) {
 func mySort(nums []int, l, r int, tmpNums []int) {
 	if l < r {
 		m := (l + r) / 2
+		//先分再拍
 		mySort(nums, l, m, tmpNums)
 		mySort(nums, m+1, r, tmpNums)
 		merge(nums, l, m, r, tmpNums)
